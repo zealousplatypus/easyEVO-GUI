@@ -18,7 +18,8 @@ def generate_dfs(file_path):
         end_idx = header_indices[i + 1] if i + 1 < len(header_indices) else len(lines)
         experiment_data = ''.join(lines[start_idx:end_idx])
         experiment_df = pd.read_csv(io.StringIO(experiment_data), header=None, names=header.strip().split(','))
-        experiments.append(experiment_df)
+        if not experiment_df.empty:
+            experiments.append(experiment_df)
     return experiments
 
 # plot the ODs over time of the current experiment

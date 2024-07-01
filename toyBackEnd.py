@@ -26,13 +26,30 @@ def csv_transfer(file):
                 f.write(line)
                 print("Writing data...")
 
-def plot_OD(ax):
+def populate_dropdown():
     # Testing mode
     if ser is None:
         print('No serial connection, plotting test file')
         file = 'output_test.csv'
-        plotter.read_and_plot_OD(file, ax)
+        exps = plotter.generate_dfs(file)
     else: # there's a connection
         file = 'output.csv'
         csv_transfer(file) 
-        plotter.read_and_plot_OD(file, ax)
+        exps = plotter.generate_dfs(file)
+    result = []
+    for i in range(len(exps) - 1):
+        result.append('Experiment ' + str(i + 1))
+    result.append('Current Experiment')
+    return result
+    
+
+def plot_OD(ax, experiment_number):
+    # Testing mode
+    if ser is None:
+        print('No serial connection, plotting test file')
+        file = 'output_test.csv'
+        plotter.read_and_plot_OD(file, ax, experiment_number)
+    else: # there's a connection
+        file = 'output.csv'
+        csv_transfer(file) 
+        plotter.read_and_plot_OD(file, experiment_number)

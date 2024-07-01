@@ -23,51 +23,15 @@ def generate_dfs(file_path):
     return experiments
 
 # plot the ODs over time of the current experiment
-def plot_current_ODs(experiments, ax):
-    experiment = experiments[-1]
+def plot_OD(experiments, ax, experiment_number):
+    experiment = experiments[experiment_number]
     # ax.figure(figsize=(10, 6))
     ax.plot(experiment['upTime'], experiment['OD940'], label='OD940')
     ax.set_xlabel('upTime')
     ax.set_ylabel('OD940')
     ax.legend()
 
-# plot the ODs over time of all experiments in the csv
-def plot_all_ODs(experiments):
-    # Plot data from each experiment
-    for idx, experiment in enumerate(experiments):
-        plt.figure(figsize=(10, 6))
-        plt.plot(experiment['upTime'], experiment['OD940'], label='OD940')
-        plt.xlabel('upTime')
-        plt.ylabel('OD940')
-        plt.title(f'Experiment {idx + 1}')
-        plt.legend()
-        plt.show()
-
-# plot the ODs over time of all experiments in the csv in a grid format
-def plot_all_ODs_grid(experiments):
-    num_experiments = len(experiments)
-    num_cols = 2  # Number of columns in the grid
-    num_rows = (num_experiments + num_cols - 1) // num_cols  # Calculate number of rows needed
-
-    fig, axes = plt.subplots(num_rows, num_cols, figsize=(15, 5 * num_rows))
-    axes = axes.flatten()
-
-    for idx, experiment in enumerate(experiments):
-        ax = axes[idx]
-        ax.plot(experiment['upTime'], experiment['OD940'], label=f'Experiment {idx + 1}')
-        ax.set_xlabel('upTime')
-        ax.set_ylabel('OD940')
-        ax.set_title(f'Experiment {idx + 1}')
-        ax.legend()
-
-    # Remove any empty subplots
-    for idx in range(num_experiments, len(axes)):
-        fig.delaxes(axes[idx])
-
-    plt.tight_layout()
-    plt.show()
-
-def read_and_plot_OD(file_path, ax):
+def read_and_plot_OD(file_path, ax, n):
     # Load the CSV file
     experiments = generate_dfs(file_path)
-    plot_current_ODs(experiments , ax)
+    plot_OD(experiments , ax, n)

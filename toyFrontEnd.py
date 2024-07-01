@@ -24,7 +24,7 @@ class evoUI(QWidget):
         
         # Adding plot OD dropdown menu and button
         self.od_dropdown = QComboBox(self)
-        self.od_dropdown.addItems(["Option 1", "Option 2", "Option 3"])
+        self.od_dropdown.addItems(toyBackEnd.populate_dropdown())
         self.OD_button = QPushButton('Plot OD', self)
 
         # Button Functionality
@@ -132,8 +132,9 @@ class evoUI(QWidget):
             print("Down button clicked")
 
     def OD_clicked(self):
+        experiment_num = self.od_dropdown.currentIndex()
         self.ax.clear()
-        toyBackEnd.plot_OD(self.ax)
+        toyBackEnd.plot_OD(self.ax, experiment_num)
         self.canvas.draw()
 
 

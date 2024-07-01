@@ -26,13 +26,13 @@ def csv_transfer(file):
                 f.write(line)
                 print("Writing data...")
 
-def plot_OD():
+def plot_OD(ax):
     # Testing mode
     if ser is None:
         print('No serial connection, plotting test file')
         file = 'output_test.csv'
-        plotter.read_and_plot_OD(file)
+        plotter.read_and_plot_OD(file, ax)
     else: # there's a connection
         file = 'output.csv'
         csv_transfer(file) 
-        plotter.read_and_plot_OD(file)
+        plotter.read_and_plot_OD(file, ax)

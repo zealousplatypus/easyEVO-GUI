@@ -1,12 +1,18 @@
 import sys
 import toyBackEnd
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QGridLayout, QFrame, QComboBox
+import seaborn as sns
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from PyQt5.QtCore import QSize
+
 
 class evoUI(QWidget):
     def __init__(self):
         super().__init__()
         self.initButtons()
         self.initDisplay()
+        self.initPlot()
         self.initUI()
         
     def initButtons(self):
@@ -85,6 +91,19 @@ class evoUI(QWidget):
 
         self.frame = frame
 
+    def initPlot(self):
+        # Create a layout for the plot
+        self.plot_layout = QVBoxLayout()
+        self.figure, self.ax = plt.subplots()
+        self.canvas = FigureCanvas(self.figure)
+        self.canvas.setMinimumSize(QSize(500, 300))  # Set the minimum size of the canvas
+        self.plot_layout.addWidget(self.canvas)
+
+        # Set the initial titles for the axes
+        self.ax.set_xlabel('upTime')
+        self.ax.set_ylabel('OD940')
+        self.figure.tight_layout(pad=3)
+
     def initUI(self):
         # Initialize main layout
         main_layout = QHBoxLayout()
@@ -92,6 +111,7 @@ class evoUI(QWidget):
         # Add button layout and frame layout to the main layout
         main_layout.addLayout(self.button_layout)
         main_layout.addWidget(self.frame)
+        main_layout.addLayout(self.plot_layout)
 
         # Set the layout for the main window
         self.setLayout(main_layout)
@@ -112,7 +132,9 @@ class evoUI(QWidget):
             print("Down button clicked")
 
     def OD_clicked(self):
-        toyBackEnd.plot_OD()
+        self.ax.clear()
+        toyBackEnd.plot_OD(self.ax)
+        self.canvas.draw()
 
 
 

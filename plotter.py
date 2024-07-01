@@ -23,14 +23,13 @@ def generate_dfs(file_path):
     return experiments
 
 # plot the ODs over time of the current experiment
-def plot_current_ODs(experiments):
+def plot_current_ODs(experiments, ax):
     experiment = experiments[-1]
-    plt.figure(figsize=(10, 6))
-    plt.plot(experiment['upTime'], experiment['OD940'], label='OD940')
-    plt.xlabel('upTime')
-    plt.ylabel('OD940')
-    plt.legend()
-    plt.show()
+    # ax.figure(figsize=(10, 6))
+    ax.plot(experiment['upTime'], experiment['OD940'], label='OD940')
+    ax.set_xlabel('upTime')
+    ax.set_ylabel('OD940')
+    ax.legend()
 
 # plot the ODs over time of all experiments in the csv
 def plot_all_ODs(experiments):
@@ -68,7 +67,7 @@ def plot_all_ODs_grid(experiments):
     plt.tight_layout()
     plt.show()
 
-def read_and_plot_OD(file_path):
+def read_and_plot_OD(file_path, ax):
     # Load the CSV file
     experiments = generate_dfs(file_path)
-    plot_current_ODs(experiments)
+    plot_current_ODs(experiments , ax)

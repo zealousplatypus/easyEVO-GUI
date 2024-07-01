@@ -1,6 +1,6 @@
 import sys
 import toyBackEnd
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QGridLayout, QFrame
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QGridLayout, QFrame, QComboBox
 
 class evoUI(QWidget):
     def __init__(self):
@@ -15,6 +15,10 @@ class evoUI(QWidget):
         self.up_button = QPushButton('Up', self)
         self.select_button = QPushButton('Select', self)
         self.down_button = QPushButton('Down', self)
+        
+        # Adding plot OD dropdown menu and button
+        self.od_dropdown = QComboBox(self)
+        self.od_dropdown.addItems(["Option 1", "Option 2", "Option 3"])
         self.OD_button = QPushButton('Plot OD', self)
 
         # Button Functionality
@@ -28,6 +32,7 @@ class evoUI(QWidget):
         button_layout.addWidget(self.select_button)
         button_layout.addWidget(self.down_button)
         button_layout.addStretch()  # Add a stretch at the end to keep buttons together
+        button_layout.addWidget(self.od_dropdown)
         button_layout.addWidget(self.OD_button)
 
         self.button_layout = button_layout

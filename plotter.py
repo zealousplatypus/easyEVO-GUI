@@ -25,7 +25,6 @@ def generate_dfs(file_path):
 # plot the ODs over time of the current experiment
 def plot_OD(experiments, ax, experiment_number):
     experiment = experiments[experiment_number]
-    # ax.figure(figsize=(10, 6))
     ax.plot(experiment['upTime'], experiment['OD940'], label='OD940')
     ax.set_xlabel('upTime')
     ax.set_ylabel('OD940')
@@ -34,4 +33,4 @@ def plot_OD(experiments, ax, experiment_number):
 def read_and_plot_OD(file_path, ax, n):
     # Load the CSV file
     experiments = generate_dfs(file_path)
-    plot_OD(experiments , ax, n)
+    plot_OD(experiments, ax, n)

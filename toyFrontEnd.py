@@ -1,11 +1,10 @@
+import argparse
 import sys
 import toyBackEnd
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QGridLayout, QFrame, QComboBox
-import seaborn as sns
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from PyQt5.QtCore import QSize
-
 
 class evoUI(QWidget):
     def __init__(self):
@@ -18,28 +17,32 @@ class evoUI(QWidget):
     def initButtons(self):
         # Make a vertical layout for the buttons
         button_layout = QVBoxLayout()
-        self.up_button = QPushButton('Up', self)
-        self.select_button = QPushButton('Select', self)
-        self.down_button = QPushButton('Down', self)
+        # self.up_button = QPushButton('Up', self)
+        # self.select_button = QPushButton('Select', self)
+        # self.down_button = QPushButton('Down', self)
         
         # Adding plot OD dropdown menu and button
         self.od_dropdown = QComboBox(self)
         self.od_dropdown.addItems(toyBackEnd.populate_dropdown())
         self.OD_button = QPushButton('Plot OD', self)
+        self.stats_button = QPushButton('Update Stats', self)
 
         # Button Functionality
-        self.up_button.clicked.connect(self.up_clicked)
-        self.select_button.clicked.connect(self.sel_clicked)
-        self.down_button.clicked.connect(self.down_clicked)
+        # self.up_button.clicked.connect(self.up_clicked)
+        # self.select_button.clicked.connect(self.sel_clicked)
+        # self.down_button.clicked.connect(self.down_clicked)
         self.OD_button.clicked.connect(self.OD_clicked)
+        self.stats_button.clicked.connect(self.stats_clicked)
 
         # Button layout
-        button_layout.addWidget(self.up_button)
-        button_layout.addWidget(self.select_button)
-        button_layout.addWidget(self.down_button)
+        # button_layout.addWidget(self.up_button)
+        # button_layout.addWidget(self.select_button)
+        # button_layout.addWidget(self.down_button)
         button_layout.addStretch()  # Add a stretch at the end to keep buttons together
         button_layout.addWidget(self.od_dropdown)
         button_layout.addWidget(self.OD_button)
+        button_layout.addWidget(self.stats_button)
+        button_layout.addStretch()
 
         self.button_layout = button_layout
 
@@ -122,14 +125,17 @@ class evoUI(QWidget):
 
         self.show()
     
-    def up_clicked(self):
-        print("Up button clicked")
+    # def up_clicked(self):
+    #     print("Up button clicked")
+    #     toyBackEnd.simulate_btn("up")
 
-    def sel_clicked(self):
-        print("Select button clicked")
+    # def sel_clicked(self):
+    #     print("Select button clicked")
+    #     toyBackEnd.simulate_btn("sel")
 
-    def down_clicked(self):
-            print("Down button clicked")
+    # def down_clicked(self):
+    #     print("Down button clicked")
+    #     toyBackEnd.simulate_btn("down")
 
     def OD_clicked(self):
         experiment_num = self.od_dropdown.currentIndex()
@@ -137,11 +143,36 @@ class evoUI(QWidget):
         toyBackEnd.plot_OD(self.ax, experiment_num)
         self.canvas.draw()
 
+    def stats_clicked(self):
+        last_row = toyBackEnd.read_stats()
+        self.uptime_display.setText(f"{last_row['upTime']}")
+        self.ambient_temp_display.setText(f"{last_row['ambientTemp']}°C")
+        self.media_temp_display.setText(f"{last_row['mediaTemp']}°C")
+        self.heaterplate_temp_display.setText(f"{last_row['heaterPlateTemp']}°C")
+        self.ir_display.setText(f"{last_row['infraredReading']}")
+        self.od_display.setText(f"{round(last_row['OD940'], 4)}")
 
 
+def main():
+    parser = argparse.ArgumentParser(description='easyEVO GUI')
+    parser.add_argument('--reset', action='store_true', help='Start new run')
+    parser.add_argument('--continue', action='store_true', help='Resume old run')
+    parser.add_argument('--testing', action='store_true', help='Skips serial connection')
+    args = parser.parse_args()
 
-if __name__ == '__main__':
-    # toyBackEnd.init_BackEnd_Connection()
+
+    if args.testing:
+        print('Testing Mode')
+    elif args.reset:
+        toyBackEnd.init_BackEnd_Connection(mode='reset')
+    else:
+        toyBackEnd.init_BackEnd_Connection(mode='continue')
+        
+    print("Initializing UI")
     app = QApplication(sys.argv)
     ex = evoUI()
     sys.exit(app.exec_())
+
+
+if __name__ == '__main__':
+    main()

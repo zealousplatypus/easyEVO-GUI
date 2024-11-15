@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import io
 
-# Process the  easyEVO output csv format into multiple dataframes per experiment
+# Process the easyEVO output csv format into multiple dataframes per experiment
 def generate_dfs(file_path):
     with open(file_path, 'r') as file:
         lines = file.readlines()
@@ -22,15 +22,18 @@ def generate_dfs(file_path):
             experiments.append(experiment_df)
     return experiments
 
-# plot the ODs over time of the current experiment
-def plot_OD(experiments, ax, experiment_number):
+# plot the ODs over time of the current experiment, with time in hours
+def plot_OD(experiments, ax, experiment_number, start_time_hours, end_time_hours):
     experiment = experiments[experiment_number]
-    ax.plot(experiment['upTime'], experiment['OD940'], label='OD940')
-    ax.set_xlabel('upTime')
+    # Convert upTime from seconds to the specified hours scale
+    ax.plot(experiment['upTime'] / 3600.0, experiment['OD940'], label='OD940')
+    ax.set_xlabel('Time (hours)')
     ax.set_ylabel('OD940')
     ax.legend()
 
-def read_and_plot_OD(file_path, ax, n):
+    ax.set_xlim([start_time_hours, end_time_hours])
+
+def read_and_plot_OD(file_path, ax, n, start_time_hours, end_time_hours):
     # Load the CSV file
     experiments = generate_dfs(file_path)
-    plot_OD(experiments, ax, n)
+    plot_OD(experiments, ax, n, start_time_hours, end_time_hours)

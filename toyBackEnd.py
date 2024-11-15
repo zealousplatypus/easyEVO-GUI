@@ -1,3 +1,4 @@
+
 import serial
 import time
 import plotter
@@ -42,7 +43,6 @@ def perform_handshake(mode):
                 return True
     return False
 
-
 def send_start_time():
     # Compute and send the startTime for continuation
     file = output_file  # Adjust the filename as needed
@@ -69,7 +69,6 @@ def send_start_time():
     except Exception as e:
         print(f"Error in send_start_time: {e}")
 
-
 # Function to send 'get csv' command to Arduino
 # 'file' is output filename
 def csv_transfer(file):
@@ -82,8 +81,6 @@ def csv_transfer(file):
                     print("File transfer complete.")
                     break
                 f.write(line)
-                # print("Writing data...")
-
 
 def populate_dropdown():
     # Testing mode
@@ -100,17 +97,17 @@ def populate_dropdown():
     result.append('Current Experiment')
     return result
     
-
-def plot_OD(ax, experiment_number):
+def plot_OD(ax, experiment_number, start_time_hours, end_time_hours):
     # Testing mode
     if ser is None:
         print('No serial connection, plotting test file')
         file = 'output_test.csv'
     else: # there's a connection
         file = output_file
-        csv_transfer(file) 
-    plotter.read_and_plot_OD(file, ax, experiment_number)
-
+        csv_transfer(file)
+    
+    # Pass time scale to the plotter function
+    plotter.read_and_plot_OD(file, ax, experiment_number, start_time_hours, end_time_hours)
 
 def read_stats():
     if ser is None: # Testing mode

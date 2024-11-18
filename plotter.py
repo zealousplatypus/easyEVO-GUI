@@ -23,7 +23,8 @@ def generate_dfs(file_path):
     return experiments
 
 # plot the ODs over time of the current experiment, with time in hours
-def plot_OD(experiments, ax, experiment_number, start_time_hours, end_time_hours):
+def plot_OD(experiments, ax, experiment_number, start_time_hours=None, end_time_hours=None):
+    print(len(experiments))
     experiment = experiments[experiment_number]
     # Convert upTime from seconds to the specified hours scale
     ax.plot(experiment['upTime'] / 3600.0, experiment['OD940'], label='OD940')
@@ -33,7 +34,7 @@ def plot_OD(experiments, ax, experiment_number, start_time_hours, end_time_hours
 
     ax.set_xlim([start_time_hours, end_time_hours])
 
-def read_and_plot_OD(file_path, ax, n, start_time_hours, end_time_hours):
+def read_and_plot_OD(file_path, ax, n, start_time_hours=None, end_time_hours=None):
     # Load the CSV file
     experiments = generate_dfs(file_path)
     plot_OD(experiments, ax, n, start_time_hours, end_time_hours)

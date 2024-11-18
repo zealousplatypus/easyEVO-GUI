@@ -97,7 +97,7 @@ def populate_dropdown():
     result.append('Current Experiment')
     return result
     
-def plot_OD(ax, experiment_number, start_time_hours, end_time_hours):
+def plot_OD(ax, experiment_number, start_time_hours=None, end_time_hours=None):
     # Testing mode
     if ser is None:
         print('No serial connection, plotting test file')

@@ -133,21 +133,30 @@ class evoUI(QWidget):
     
     def OD_clicked(self):
         experiment_num = self.od_dropdown.currentIndex()
-        start_time_hours = self.start_time_input.text()
-        end_time_hours = self.end_time_input.text()
-
-        # Validate the time scale input
-        try:
-            start_time_hours = float(start_time_hours)
-            end_time_hours = float(end_time_hours)
-        except ValueError:
-            print("Invalid time scale. Please enter a number.")
-            return
+        start_time_text = self.start_time_input.text()
+        end_time_text = self.end_time_input.text()
 
         self.ax.clear()
+
+        # Validate start and end times
+        try:
+            start_time_hours = float(start_time_text) if start_time_text.strip() else None
+            end_time_hours = float(end_time_text) if end_time_text.strip() else None
+
+            # Ensure start_time is less than end_time if both are provided
+            if start_time_hours is not None and end_time_hours is not None:
+                if start_time_hours >= end_time_hours:
+                    print("Start time must be less than end time.")
+                    return
+        except ValueError:
+            print("Invalid time input. Please enter valid numbers.")
+            return
+
+        # Call the plotting function with the validated start and end times
         toyBackEnd.plot_OD(self.ax, experiment_num, start_time_hours, end_time_hours)
         self.ax.set_xlabel('Time (hours)')
         self.canvas.draw()
+
 
     def stats_clicked(self):
         last_row = toyBackEnd.read_stats()
